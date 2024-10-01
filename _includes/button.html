@@ -1,0 +1,10 @@
+<a class="button" href="{{ include.link | default: '#' }}"{% if include.color %} style="background: {{ include.color }}"{% endif %}>{{ include.text | default: "Button" }}{% if include.icon %}&nbsp; {% include icon.html id=include.icon title=include.icon %}{% endif %}</a>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QVEXRNG2D3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-QVEXRNG2D3');
+</script>
