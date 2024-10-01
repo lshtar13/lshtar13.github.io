@@ -13,6 +13,7 @@ Contains basic configuration to get you a site with:
 - Sample about page.
 - Sample 404 page.
 - Site wide search.
+- yeah
 
 Replace sample content with your own and [configure as necessary](https://mmistakes.github.io/minimal-mistakes/docs/configuration/).
 
