@@ -36,17 +36,12 @@ export const socialLinks: Array<SocialLink> = [
   {
     icon: "mdi:github",
     friendlyName: "Github",
-    link: "https://github.com/kirontoo/astro-theme-cody",
-  },
-  {
-    icon: "mdi:linkedin",
-    friendlyName: "LinkedIn",
-    link: "#",
+    link: "https://github.com/lshtar13/",
   },
   {
     icon: "mdi:email",
     friendlyName: "email",
-    link: "mailto:ndangamy@gmail.com",
+    link: "mailto:edwin109802@gmail.com",
   },
   {
     icon: "mdi:rss",
@@ -64,16 +59,21 @@ export const NAV_LINKS: Array<{ title: string, path: string }> = [
     title: "About",
     path: "/about",
   },
-  {
-    title: "Blog",
+  { title: "Blog",
     path: "/blog",
   },
-  {
-    title: "Projects",
-    path: '/projects'
+  { title: "Tags",
+    path: "/tags",
   },
-  {
-    title: "Archive",
-    path: '/archive'
-  }
+  { title: "Series",
+    path: "/series",
+  },
+  // {
+  //   title: "Projects",
+  //   path: '/projects'
+  // },
+  // {
+  //   title: "Archive",
+  //   path: '/archive'
+  // }
 ];
