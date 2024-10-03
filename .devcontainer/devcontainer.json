@@ -10,7 +10,8 @@
 		"vscode": {
 			"extensions": [
 				"vscodevim.vim",
-				"astro-build.astro-vscode"
+				"astro-build.astro-vscode",
+				"github.vscode-github-actions"
 			]
 		}
 	}
