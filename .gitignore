@@ -4,7 +4,7 @@ astro/dist/
 astro/.astro/
 
 # dependencies
-astro/node_modules/
+astro/node_modules/*
 
 # logs
 astro/npm-debug.log*
