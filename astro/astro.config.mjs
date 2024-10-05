@@ -6,13 +6,12 @@ import { remarkReadingTime } from './src/utils/remark-reading-time.mjs';
 
 import tailwind from "@astrojs/tailwind";
 
-
-console.log(import.meta.env.MODE)
-
+// export const SiteURL = import.meta.env.VITE_URL
+// console.log(SiteURL)
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://lshtar13.github.io',
-  integrations: [mdx(), sitemap(), tailwind()],
+  site: import.meta.env.VITE_URL,
+  integrations: [mdx(), sitemap(), tailwind(), sitemap()],
   markdown: {
     remarkPlugins: [remarkReadingTime],
     syntaxHighlight: 'shiki',

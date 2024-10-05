@@ -16,6 +16,7 @@ const { title = "", description = siteConfig.description, image } = Astro.props;
 <!doctype html>
 <html lang="en" class="dark">
 	<head>
+		<link rel="sitemap" href="/sitemap-index.xml" />
 		<BaseHead title={title} description={description} image={image} />
 	</head>
 	<body>
