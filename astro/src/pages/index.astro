@@ -1,8 +1,13 @@
 ---
-import BaseLayout from '../layouts/Base.astro';
+import BaseLayout from "../layouts/Base.astro";
 import PostPreview from "@/components/blog/PostPreviewB";
 import SocialMediaLinks from "@/components/SocialMediaLinks";
-import { getAllPosts, sortMDByDate, sortMDByPinned } from "@/utils";
+import {
+	getAllPosts,
+	getAllSeries,
+	sortMDByDate,
+	sortMDByPinned,
+} from "@/utils";
 
 const MAX_POSTS = 10;
 const allPosts = await getAllPosts();
@@ -41,7 +46,6 @@ const tech: Array<{ title: string; desc: string; href: string }> = [
 		href: "https://github.com/natemoo-re/astro-icon#readme",
 	},
 ];
-
 ---
 
 <BaseLayout title="Home">
@@ -52,35 +56,35 @@ const tech: Array<{ title: string; desc: string; href: string }> = [
 		</p>
 		<div>
 			<span>You can find me on: </span>
-			<SocialMediaLinks/>
+			<SocialMediaLinks />
 		</div>
 	</section>
 
 	<section class="mt-8 sm:mt-16">
 		<h2 class="title">Posts</h2>
 		<ul class="space-y-4 sm:space-y-2">
-			{allPostsByPinned.map(p => <PostPreview post={p}/>)}
+			{allPostsByPinned.map((p) => <PostPreview post={p} />)}
 		</ul>
 	</section>
 
 	<section class="mt-16">
-			<h2 class="title">Technologies</h2>
-			<ul class="space-y-4 sm:space-y-2">
-				{
-					tech.map(({ href, title, desc }) => (
-						<li>
-							<a
-								href={href}
-								target="_blank"
-								rel="noopener noreferrer"
-								class="cody-link inline-block"
-							>
-								{title}
-							</a>: 
-							<p class="inline-block sm:mt-2">{desc}</p>
-						</li>
-					))
-				}
-			</ul>
-		</section>
+		<h2 class="title">Technologies</h2>
+		<ul class="space-y-4 sm:space-y-2">
+			{
+				tech.map(({ href, title, desc }) => (
+					<li>
+						<a
+							href={href}
+							target="_blank"
+							rel="noopener noreferrer"
+							class="cody-link inline-block"
+						>
+							{title}
+						</a>
+						:<p class="inline-block sm:mt-2">{desc}</p>
+					</li>
+				))
+			}
+		</ul>
+	</section>
 </BaseLayout>
