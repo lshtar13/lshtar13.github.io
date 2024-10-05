@@ -6,6 +6,9 @@ import { remarkReadingTime } from './src/utils/remark-reading-time.mjs';
 
 import tailwind from "@astrojs/tailwind";
 
+
+console.log(import.meta.env.MODE)
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://lshtar13.github.io',
