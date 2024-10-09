@@ -1,6 +1,6 @@
 ---
-title: 'QEMU에 라즈비안 설치 (in github codespace) [Linux Kernel]'
-description: '작성 중'
+title: 'QEMU에 라즈비안 설치 [Linux Kernel]'
+description: 'github codespace에서'
 pubDate: 'Oct 07 2024'
 heroImage: 
   src: '/blog-placeholder-4.jpg'
