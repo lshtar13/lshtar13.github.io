@@ -62,8 +62,10 @@ void run_local_timers(void)
 	softlockup_tick();
 }
 ```</br>
+
 timer interrupt가 발생하면 raise_softirq(TIMER_SOFTIRQ)를 호출하여 softirq를 요청하는 것을 볼 수 있다. 해당 softirq는 요청 즉시 처리되는 것이 아니라 interrupt handling이 종료될 때 irq_exit()에 의해 실행된다.
 다음은 x86 아키텍쳐에서 interrupt handling을 처리하는 코드이다. 해당 코드의 끝자락, interrupt handling을 종료하는 코드에서 softirq 수행을 요청하는 do_softirq()를 호출하는 것을 볼 수 있다.</br>
+
 ```
 /*
  * do_IRQ handles all normal device IRQ's (the special
@@ -97,8 +99,6 @@ unsigned int __irq_entry do_IRQ(struct pt_regs *regs)
 	return 1;
 }
 
-...
-
 /*
  * Exit an interrupt context. Process softirqs if needed and possible:
  */
@@ -118,8 +118,6 @@ void irq_exit(void)
 #endif
 	preempt_enable_no_resched();
 }
-
-...
 
 #ifdef __ARCH_IRQ_EXIT_IRQS_DISABLED
 # define invoke_softirq()	__do_softirq()
