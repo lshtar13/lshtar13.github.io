@@ -142,7 +142,7 @@ irqexit()에서 sub_preempt_count()를 통해 다른 interrupt의 preempt를 허
 
 ### ksoftirqd
 softirq를 처리하는 과정에서 새로운 softirq가 요청될 수 있다. 이러한 경우, 반복적으로 softirq가 만들어지기 때문에 쌓이는 softirq를 처리하는 시간이 길어져 다른 프로세스이 실행되기까지의 대기시간이 길어진다.
-이러한 단점을 막고자 재등록되는 softirq를 연속적으로 처리하지 않고 ksoftirqd라는 커널 스레드에게 넘기기로 하였다. ksoftirqd는 쌓이는 softirq를 일괄적으로 처리하는 역할을 담당한다. 이러한 스레드가 높은 우선순위를 가져
+이러한 단점을 막고자 재등록되는 softirq를 연속적으로 처리하지 않고 ksoftirqd라는 커널 스레드에게 넘기기로 하였다(precess context). ksoftirqd는 쌓이는 softirq를 일괄적으로 처리하는 역할을 담당한다. 이러한 스레드가 높은 우선순위를 가져
 계속해서 실행되면, 이 역시 다른 프로세스의 실행을 가로막게 되므로 상대적으로 낮은 우선순위(나이스값 19)을 갖는다. 실행될 때마다 do_softirq()를 호출하여 쌓여있는 softirq를 처리한다. 이때, preempt_disable()을 실행함으로써
 다른 프로세스들의 preempt를 막는다. ksoftirqd의 움직임은 다음 코드와 같다.</br>
 ```
@@ -205,4 +205,10 @@ softirq의 9개 작업을 살펴보면 다음과 같다.
 
 이중 HI_SOFTIRQ와 TASKLET_SOFTIRQ는 각각, 높은 우선순위의 tasklet softirq와 일반 우선순위의 tasklet softirq이다. 즉, tasklet은 softirq에 의해 이루어진다는 것이다. 
 (+ 7번째 softirq를 보면 CFS도 softirq를 이용해 loadbalancing을 하는 것을 알 수 있다.)</br>
-HI_SOFTIRQ와 TASKLET_SOFTIRQ의 handler는 각각 가지고 있는 tasklet 구조체 배열(대기열)을 순회하면서 해당 tasklet의 handler를 실행한다. tasklet을 대기열에 포함시키려면 `tasklet_schedule()`을 이용하면 된다.
+HI_SOFTIRQ와 TASKLET_SOFTIRQ의 handler는 각각 가지고 있는 tasklet 구조체 배열(대기열)을 순회하면서 해당 tasklet의 handler를 실행한다. tasklet을 대기열에 포함시키려면 tasklet_schedule()을 이용하면 된다.
+
+## workqueue
+softirq와 tasklet은, tasklet은 softirq 기반이니 당연하게도, interrupt context에서 실행된다. 따라서 다른 프로세스에 의해 preempt될 수 없고 따라서 휴면상태에 돌입할 수 없다. 
+만약 휴면상태로의 전환이 필요한 작업을 수행해야 한다면 process context에서 실행되는, 따라서 스케쥴링이 가능한 workqueue 방식을 사용해야 할 것이다.</br>
+workqueue 방식은 커널 스레드를 사용하여 BH들을 process context에서 수행하는 방식이다. 프로세서들은 각각 하나 이상의 작업 커널 스레드들을 갖는다. 각각의 스레드들은 자신의 workqueue를 관리하며, 해당 queue에 
+삽입된 작업들을 처리하게 된다. create_workqueue()를 이용해서 작업 스레드를 만들고, DECLARE_WORK() 매크로를 이용해서 BH작업을 만든다. 만들어진 작업은 schedule_work()를 통해 workqueue에 삽입된다.
