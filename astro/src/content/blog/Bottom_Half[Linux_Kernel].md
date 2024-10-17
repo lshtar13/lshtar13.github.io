@@ -191,4 +191,15 @@ wait_to_die:
 }
 ```
 
-### do_softirq()
+## tasklet
+softirq의 9개 작업을 살펴보면 다음과 같다.
+0. HI_SOFTIRQ
+1. TIMER_SOFTIRQ
+2. NET_TX_SOFTIRQ
+3. NET_RX_SOFTIRQ
+4. BLOCK_SOFTIRQ
+5. TASKLET_SOFTIRQ
+6. TASKLET_SOFTIRQ
+7. SCHED_SOFTIRQ
+8. HRTIMER_SOFTIRQ
+9. RCU_SOFTIRQ
