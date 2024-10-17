@@ -22,8 +22,9 @@ BH에서는 이와는 다르게, 특수한 환경이 필요하지 않고 시간�
 BH를 수행하는데 사용되는 방식은 크게 두가지이다. softirq와 workqeue가 그것인데, softirq를 이용한 tasklet도 존재한다. 각각 구현 방식과 그 쓰임새가 다르다.
 
 ## softirq
-softirq는 프로세서별로 수행되는, 정적으로 등록된 작업들을 수행하는 BH 구현 방식이다. softirq 방식을 통해 수행되는 작업들은 컴파일시에 고정되며, 프로세서별로 해당 작업 집합 내에서 필요한 작업들을 수집하여 수행한다. 
-softirq 작업은최대 32개까지 등록될 수 있으며, v2.6.34기준으로 9개가 등록되어있다. 각 softirq 작업들은 0~8까지의 인덱스를 가지며, 인덱스가 작을수록 먼저 수행된다.</br>
+softirq는 프로세서별로 수행되는, 정적으로 등록된 작업들을 수행하는 BH 구현 방식이다. softirq 방식을 통해 수행되는 작업들은 컴파일시에 고정되며, 프로세서별로 해당 작업 집합 내에서 필요한 작업들을 수집하여 수행한다.</br>
+softirq 작업은최대 32개까지 등록될 수 있으며, v2.6.34기준으로 9개가 등록되어있다. 각 softirq 작업들은 0~8까지의 인덱스를 가지며, 인덱스가 작을수록 먼저 수행된다. 각 작업들에 대한 수행 요청은 프로세서별로 가지는 벡터의 비트마스크로 
+표현된다. 즉, 9개의 비트를 통해서 나타내어진다는 것이다. do_softirq()가 LSB부터 탐색하기 때문에 인덱스 순으로 처리된다.</br>
 softirq는 open_softirq()를 통해 각 작업들에 대한 softirq handler를 등록한다. 등록된 softirq작업을 실행하려면 raise_softirq('softirq 인덱스')함수를 호출하여 해당 인덱스에 해당하는 softirq의 작업을 요청한다.
 raise_softirq()를 통해 요청된 작업들은 다음과 같은 상황에 do_softirq()를 통해 실행된다.
 * Interrupt Hanlidng 종료 시
@@ -126,4 +127,58 @@ void irq_exit(void)
 # define invoke_softirq()	do_softirq()
 #endif
 ```</br>
+
+irqexit()에서 sub_preempt_count()를 통해 다른 interrupt의 preempt를 허용한 상태에서 softirq를 실행하는 것을 확인할 수 있다.(여전히 interrupt context, 다른 프로세스의 preempt 불가)
+
 ### ksoftirqd
+softirq를 처리하는 과정에서 새로운 softirq가 요청될 수 있다. 이러한 경우, 반복적으로 softirq가 만들어지기 때문에 쌓이는 softirq를 처리하는 시간이 길어져 다른 프로세스이 실행되기까지의 대기시간이 길어진다.
+이러한 단점을 막고자 재등록되는 softirq를 연속적으로 처리하지 않고 ksoftirqd라는 커널 스레드에게 넘기기로 하였다. ksoftirqd는 쌓이는 softirq를 일괄적으로 처리하는 역할을 담당한다. 이러한 스레드가 높은 우선순위를 가져
+계속해서 실행되면, 이 역시 다른 프로세스의 실행을 가로막게 되므로 상대적으로 낮은 우선순위(나이스값 19)을 갖는다. 실행될 때마다 do_softirq()를 호출하여 쌓여있는 softirq를 처리한다. 이때, preempt_disable()을 실행함으로써
+다른 프로세스들의 preempt를 막는다. ksoftirqd의 움직임은 다음 코드와 같다.</br>
+```
+static int run_ksoftirqd(void * __bind_cpu)
+{
+	set_current_state(TASK_INTERRUPTIBLE);
+
+	while (!kthread_should_stop()) {
+		preempt_disable();
+		if (!local_softirq_pending()) {
+			preempt_enable_no_resched();
+			schedule();
+			preempt_disable();
+		}
+
+		__set_current_state(TASK_RUNNING);
+
+		while (local_softirq_pending()) {
+			/* Preempt disable stops cpu going offline.
+			   If already offline, we'll be on wrong CPU:
+			   don't process */
+			if (cpu_is_offline((long)__bind_cpu))
+				goto wait_to_die;
+			do_softirq();
+			preempt_enable_no_resched();
+			cond_resched();
+			preempt_disable();
+			rcu_sched_qs((long)__bind_cpu);
+		}
+		preempt_enable();
+		set_current_state(TASK_INTERRUPTIBLE);
+	}
+	__set_current_state(TASK_RUNNING);
+	return 0;
+
+wait_to_die:
+	preempt_enable();
+	/* Wait for kthread_stop */
+	set_current_state(TASK_INTERRUPTIBLE);
+	while (!kthread_should_stop()) {
+		schedule();
+		set_current_state(TASK_INTERRUPTIBLE);
+	}
+	__set_current_state(TASK_RUNNING);
+	return 0;
+}
+```
+
+### do_softirq()
