@@ -193,13 +193,16 @@ wait_to_die:
 
 ## tasklet
 softirq의 9개 작업을 살펴보면 다음과 같다.
-0. HI_SOFTIRQ
-1. TIMER_SOFTIRQ
-2. NET_TX_SOFTIRQ
-3. NET_RX_SOFTIRQ
-4. BLOCK_SOFTIRQ
-5. TASKLET_SOFTIRQ
+1. HI_SOFTIRQ
+2. TIMER_SOFTIRQ
+3. NET_TX_SOFTIRQ
+4. NET_RX_SOFTIRQ
+5. BLOCK_SOFTIRQ
 6. TASKLET_SOFTIRQ
 7. SCHED_SOFTIRQ
 8. HRTIMER_SOFTIRQ
 9. RCU_SOFTIRQ
+
+이중 HI_SOFTIRQ와 TASKLET_SOFTIRQ는 각각, 높은 우선순위의 tasklet softirq와 일반 우선순위의 tasklet softirq이다. 즉, tasklet은 softirq에 의해 이루어진다는 것이다. 
+(+ 7번째 softirq를 보면 CFS도 softirq를 이용해 loadbalancing을 하는 것을 알 수 있다.)</br>
+HI_SOFTIRQ와 TASKLET_SOFTIRQ의 handler는 각각 가지고 있는 tasklet 구조체 배열(대기열)을 순회하면서 해당 tasklet의 handler를 실행한다. tasklet을 대기열에 포함시키려면 `tasklet_schedule()`을 이용하면 된다.
