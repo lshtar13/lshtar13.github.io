@@ -52,6 +52,10 @@ void update_process_times(int user_tick)
 	run_posix_cpu_timers(p);
 }
 
+.
+.
+.
+
 /*
  * Called by the local, per-CPU timer interrupt on SMP.
  */
@@ -99,6 +103,10 @@ unsigned int __irq_entry do_IRQ(struct pt_regs *regs)
 	return 1;
 }
 
+.
+.
+.
+
 /*
  * Exit an interrupt context. Process softirqs if needed and possible:
  */
@@ -119,12 +127,16 @@ void irq_exit(void)
 	preempt_enable_no_resched();
 }
 
+.
+.
+.
+
 #ifdef __ARCH_IRQ_EXIT_IRQS_DISABLED
 # define invoke_softirq()	__do_softirq()
 #else
 # define invoke_softirq()	do_softirq()
 #endif
-```</br>
+```
 
 irqexit()에서 sub_preempt_count()를 통해 다른 interrupt의 preempt를 허용한 상태에서 softirq를 실행하는 것을 확인할 수 있다.(여전히 interrupt context, 다른 프로세스의 preempt 불가)
 
