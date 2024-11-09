@@ -15,7 +15,7 @@ hide: false
 군대에서 개발 공부를 마음껏 할 수 있는 환경을 조성하기란 쉽지 않다.
 가용한 컴퓨터의 기능이 제한되기 때문이다.
 선택의 폭을 넓히고, 좀 더 많은 자원을 사용하기 위해 휴가를 이용해 홈 서버를 구축하기로 했다.
-![image](/astro/public/tactical_coding.jpg)
+![image](/tactical_coding_1.jpg)
 **(전술코딩.jpg)**
 
 ## 사지방
