@@ -1,5 +1,5 @@
 ---
-title: 'Tatical Coding - Double Take'
+title: 'Tactical Coding - Double Take'
 description: '홈서버 구축하기 - 구상'
 pubDate: 'Nov 09 2022'
 heroImage: 
