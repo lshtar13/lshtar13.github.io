@@ -1,0 +1,28 @@
+{
+    "BOJ COMMENT": {
+        "prefix": "BOJCOMMNET",
+        "body": [
+            "---",
+            "title: '${1:문제 번호} BOJ'",
+            "description: '${2:문제 제목}'",
+            "pubDate: '${3:Nov 11 2024}'",
+            "heroImage:",
+            "  src: '/blog-placeholder-4.jpg'",
+            "  alt: ''",
+            "tags: [\"Baekjoon\", \"BOJ\", \"Problem Solving\", \"PS\",]",
+            "series: \"PS\"",
+            "---",
+            "",
+            "# [문제](${4:문제 링크})",
+            "",
+            "## 접근",
+            "",
+            "# 코드",
+            "",
+            "```c++",
+            "$0",
+            "```"
+        ],
+        "description": "백준 문제 풀이 스니펫"
+    }
+}
