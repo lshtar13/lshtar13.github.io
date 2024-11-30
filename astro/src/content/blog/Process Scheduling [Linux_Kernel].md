@@ -84,7 +84,8 @@ check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
 3. 현재 실행중인 프로세스(`prev`)를 다시 rb-tree에 집어넣는다. (`put_prev_task()`)
 4. Rb-tree에서 vruntime이 가장 작은 프로세스(`next`)를 고른다. (`pick_next_task()`)
 5. 만약 `prev`와 `next`가 다르면, context switching을 통해 선점(preemption)을 진행한다.
-```
+
+```c
 asmlinkage void __sched schedule(void)
 {
 	struct task_struct *prev, *next;

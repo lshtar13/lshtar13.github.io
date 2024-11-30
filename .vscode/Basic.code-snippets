@@ -1,0 +1,18 @@
+{
+    "Basic COMMENT": {
+        "prefix": "BASICCOMMNET",
+        "body": [
+            "---",
+            "title: '${1:제목}'",
+            "description: '${2:설명}'",
+            "pubDate: '${3:month} ${4:day} ${5:year}'",
+            "heroImage:",
+            "  src: '/blog-placeholder-4.jpg'",
+            "  alt: ''",
+            "tags: [\"Baekjoon\", \"BOJ\", \"Problem Solving\", \"PS\",]",
+            "series: \"${6:시리즈제목}\"",
+            "---",
+        ],
+        "description": "기본 스니펫"
+    }
+}

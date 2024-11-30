@@ -41,7 +41,7 @@ entry.S에 등록한 호출 번호를 통해 시스템 콜 핸들러가 적절�
   User-space에서 전달한 포인터는 user-space의 주소를 가리키고 있어야 한다. User-space에서는 커널 주소 공간에 접근할 수 없으며, kernel-space의 데이터를 직접적으로 읽을 수 없다.
   다른 프로세스의 주소 공간을 참조하는 것 또한 방지해야 한다. 메모리의 상태에 맞게, 읽기만 가능한 상태면 읽기만, 쓰기만 가능한 상태면 쓰기만 수행되도록 해야한다. 그러한 상태를 뛰어넘는 접근은 금지되어야 한다.
   이러한 확인 작업과 동시에 주소 공간에 읽고 쓰는 작업을 실행하는 함수가 `copy_to_user()`와 `copy_from_user()`이다. 아래와 같이 확인 작업(`access_ok()`)을 먼저 수행한다.
-  ```
+  ```c
   unsigned long
   copy_to_user(void __user *to, const void *from, unsigned long n)
   {
