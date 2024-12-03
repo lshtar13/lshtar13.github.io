@@ -52,7 +52,7 @@ Data를 만나면 스택에 집어넣고, opcode를 만나면 현재 스택에 �
 
 아래는 [Mastering Blockchain](https://github.com/bitcoinbook/bitcoinbook)의 4장에 등장한 스크립트의 예제이다.
 
-```script
+```Script
 <Bob's signature> <Bob's public key> OP_CHECKSIG
 ```
 
