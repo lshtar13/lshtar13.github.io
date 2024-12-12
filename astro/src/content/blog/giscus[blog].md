@@ -27,7 +27,7 @@ Giscus는 github의 discussion으로 구성된다.
 특정한 레포지토리에 discussion에 댓글을 저장해놓고,
 웹페이지가 로딩될 때 그 discussion들을 불러와서 보여주는 식이다.
 
-이를 위해선, 특정한 github 레포지토리에 giscus 앱을 설치하고
+이를 위해선, 특정한 github 레포지토리에 [giscus 앱](https://github.com/apps/giscus)을 설치하고
 해당 레포의 disscusion을 활성화해야 한다.
 
 이후, [giscus 설정 페이지](https://giscus.app/ko)에 들어가서
