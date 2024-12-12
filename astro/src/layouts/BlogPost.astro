@@ -91,8 +91,7 @@ const articleDate = updatedDate?.toISOString() ?? pubDate.toISOString();
 			<slot />
 		</main>
 		<BackToTopBtn/>
-	</article>
-	<script src="https://giscus.app/client.js"
+		<script src="https://giscus.app/client.js"
         data-repo="lshtar13/giscus"
         data-repo-id="R_kgDONcgyxg"
         data-category="General"
@@ -107,6 +106,7 @@ const articleDate = updatedDate?.toISOString() ?? pubDate.toISOString();
         crossorigin="anonymous"
         async>
 </script>
+	</article>
 	<aside slot="sidebar" class="hidden sm:block">
 		<div class="flex flex-col space-y-2">
 			<h2 class="font-semibold text-lg text-textColor">{siteConfig.profile.author}</h2>
