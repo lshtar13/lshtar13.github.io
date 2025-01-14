@@ -5,8 +5,8 @@ pubDate: 'Jan 12 2025'
 heroImage:
   src: '/blog-placeholder-4.jpg'
   alt: ''
-tags: ["Baekjoon", "BOJ", "Problem Solving", "PS",]
-series: "Bitcoin"
+tags: ["Blockchain", "Golang"]
+series: "Blockchain"
 ---
 
 # Mimicking <[Blockchain in Go](https://github.com/Jeiwan/blockchain_go)>

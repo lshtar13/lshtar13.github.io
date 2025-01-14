@@ -6,7 +6,7 @@ heroImage:
   src: '/blog-placeholder-4.jpg'
   alt: ''
 tags: ["Linux", "Kernel", "Interrupt", "Bottom half", "softirq", "workqueue"]
-series: "Linux Kernel"
+series: "Kernel"
 ---
 
 # Material

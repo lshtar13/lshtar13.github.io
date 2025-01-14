@@ -6,7 +6,7 @@ heroImage:
   src: '/blog-placeholder-4.jpg'
   alt: ''
 tags: ["Blockchain", "Bitcoin", "Adress", "Encoding"]
-series: "Bitcoin"
+series: "Blockchain"
 ---
 
 * Resources

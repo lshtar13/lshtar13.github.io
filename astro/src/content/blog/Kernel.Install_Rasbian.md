@@ -6,7 +6,7 @@ heroImage:
   src: '/blog-placeholder-4.jpg'
   alt: ''
 tags: ["Linux", "Kernel", "Raspberry Pi"]
-series: "Linux Kernel"
+series: "Kernel"
 ---
 
 # 배경
