@@ -24,7 +24,6 @@ LIS인 점을 파악하기만 하면 금방 해결할 수 있는 문제이다.
 ## 코드
 
 ```c++
-#include <algorithm>
 #include <bits/stdc++.h>
 
 using namespace std;
