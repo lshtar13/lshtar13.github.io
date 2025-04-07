@@ -1,7 +1,7 @@
 ---
 title: '10800 BOJ'
 description: '컬러볼'
-pubDate: 'Mar 27 2028'
+pubDate: 'Mar 27 2025'
 heroImage:
   src: '/blog-placeholder-4.jpg'
   alt: ''
