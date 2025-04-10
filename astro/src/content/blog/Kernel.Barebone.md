@@ -1,6 +1,6 @@
 ---
-title: 'OS 개발 - 튜토리얼 따라하기(1)'
-description: 'Bare Bones'
+title: 'OS 개발 - Bare Bones'
+description: '튜토리얼 따라하기(1)'
 pubDate: 'Apr 06 2025'
 heroImage:
   src: '/blog-placeholder-4.jpg'
