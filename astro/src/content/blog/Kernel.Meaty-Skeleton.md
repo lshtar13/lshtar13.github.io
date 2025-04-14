@@ -2,12 +2,13 @@
 title: 'OS 개발 - Meaty Skeleton(1)'
 description: '튜토리얼 따라하기(2)'
 pubDate: 'Apr 10 2025'
+updatedDate: 'Apr 14 2025'
 heroImage:
   src: '/blog-placeholder-4.jpg'
   alt: ''
 tags: ["Operating System", "OS", "osdev.org", "Tutorial", "Meaty Skeleton"]
 series: "OSDev 따라잡기"
-hide: true
+hide: false
 ---
 
 # [Meaty Skeleton](https://wiki.osdev.org/Meaty_Skeleton)
