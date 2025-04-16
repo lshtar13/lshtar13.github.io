@@ -1,8 +1,8 @@
 ---
-title: 'OS 개발 - Meaty Skeleton(1)'
+title: 'OS 개발 - Meaty Skeleton'
 description: '튜토리얼 따라하기(2)'
 pubDate: 'Apr 10 2025'
-updatedDate: 'Apr 15 2025'
+updatedDate: 'Apr 16 2025'
 heroImage:
   src: '/blog-placeholder-4.jpg'
   alt: ''
@@ -108,7 +108,7 @@ Makefile에서 지향할 목표는 크게 다음 3개이다.
 
 옮기면 다음과 같다.
 
-```Makefile
+```make
   HOST=i686-elf
   OS=myos
 
@@ -196,10 +196,14 @@ Makefile에서 지향할 목표는 크게 다음 3개이다.
 
 ```sh
     i686-elf-gcc -v
+
     ...
+
     Target: i686-elf
     Configured with: ../gcc-11.4.0/configure --with-sysroot --target=i686-elf --prefix=/home/lshtar/os/cross --with-sysroot --disable-nls --enable-languages=c,c++ --without-headers --disable-hosted-libstdcxx : (reconfigured) ../gcc-11.4.0/configure --target=i686-elf --prefix=/home/lshtar/os/cross --with-sysroot --disable-nls --enable-languages=c,c++ --without-headers --disable-hosted-libstdcxx : (reconfigured) ../gcc-11.4.0/configure --target=i686-elf --prefix=/home/lshtar/os/cross --disable-nls --enable-languages=c,c++ --without-headers --disable-hosted-libstdcxx
+
     ...
+
     gcc version 11.4.0 (GCC) 
 ```
 
@@ -305,39 +309,41 @@ crt0.o는 boot.o가 그 역할을 대신할 것이다.
 Makefile에 crtbegin.o와 crtend.o를 복사하는 target을 추가하고,
 링크할 파일들을 수정하였다.
 
-```Makefile
-...
+```make
 
-LINKS=\
-crti.o \
-crtbegin.o \
-$(OBJS) \
-crtend.o \
-crtn.o \
+  ...
 
-CFLAGS=-ffreestanding -O2 -Wall -Wextra
-GRUBCFG=\
-menuentry "$(OS)" {\
-	multiboot /boot/$(BIN)\
-}\
+  LINKS=\
+  crti.o \
+  crtbegin.o \
+  $(OBJS) \
+  crtend.o \
+  crtn.o \
 
-...
+  CFLAGS=-ffreestanding -O2 -Wall -Wextra
+  GRUBCFG=\
+  menuentry "$(OS)" {\
+    multiboot /boot/$(BIN)\
+  }\
 
-all: $(BIN)
+  ...
 
-$(BIN): $(LINKS) $(LSCRIPT)
-	$(CC) -T $(LSCRIPT) -o $@ $(CFLAGS) -nostdlib -lgcc $(LINKS)
-	grub-file --is-x86-multiboot $@
+  all: $(BIN)
 
-crtbegin.o crtend.o:
-	POS=`$(CC) --print-file-name=$@` && cp "$$POS" $@
+  $(BIN): $(LINKS) $(LSCRIPT)
+    $(CC) -T $(LSCRIPT) -o $@ $(CFLAGS) -nostdlib -lgcc $(LINKS)
+    grub-file --is-x86-multiboot $@
 
-...
+  crtbegin.o crtend.o:
+    POS=`$(CC) --print-file-name=$@` && cp "$$POS" $@
 
-.S.o:
-	$(CC) -MD -c $< -o $@ $(CFLAGS)
+  ...
 
-...
+  .S.o:
+    $(CC) -MD -c $< -o $@ $(CFLAGS)
+
+  ...
+
 ```
 
 ## Architecture Dependency
@@ -359,3 +365,127 @@ Makefile도 개편된 디렉토리 구조에 맞게 바꾸었다.
 Makefile에서 사용하는 ARCH 변수를 수정해주면 된다.
 
 ## libc
+
+libc를 libc와 libk로 분리하여 만든다.
+두 라이브러리를 본질적으로는 같은 라이브러리이다.
+그러나, libk는 시스템콜과 같이 user-space에서는 사용할 수 있는 함수들이 포함되지 않는다.
+이렇게 둘을 분리해놓는 편이 커널 개발에 용이하다.
+현 상태에서는 시스템콜 등 user-space에서만 사용할 수 있는 기능이 구현되어 있지 않기 때문에,
+libc와 libk가 같다.
+
+libc를 만드는 과정도 kernel을 만드는 과정과 비슷하게 sysroot를 적극 이용한다.
+먼저 작성된 헤더파일들을 sysroot/usr/include로 옮긴다.
+이후, 해당 파일들을 참조하여 오브젝트 파일들을 컴파일하고
+이 오브젝트 파일들을 한데 모아 라이브러리 파일(.a)을 만든다.
+라이브러리 파일을 만드는데 사용되는 bintool은 ar이다.
+
+위 과정을 담은 Makefile 스크립트는 아래와 같다.
+만들어진 라이브러리 파일은 sysroot/usr/lib에 위치시켜 gcc가 참조할 수 있도록 한다.
+
+
+```make
+  HOST=i686-elf
+  OS=myos
+
+  ROOTDIR?=../sysroot
+  PREFIX=$(ROOTDIR)/usr
+  INCLUDEDIR=$(PREFIX)/include
+  LIBDIR=$(PREFIX)/lib
+
+  ARCH=arch/i386
+
+  AR=$(HOST)-ar
+  CC=$(HOST)-gcc --sysroot=$(ROOTDIR)
+
+  ARCH_HOSTED_OBJS=\
+
+  HOSTED_OBJS=\
+  $(ARCH_HOSTED_OBJS) \
+
+  FREE_OBJS=\
+  string/strlen.o \
+
+  OBJS=\
+  $(ARCH_HOSTED_OBJS) \
+  $(FREE_OBJS) \
+
+  LIBK_OBJS=\
+  $(OBJS:.o=.libk.o) \
+
+  LIBC_OBJS=\
+  $(OBJS) \
+
+  #BINARIES=libk.a libc.a
+  BINARIES=libk.a
+  ARFLAGS=rcs
+  CFLAGS=-ffreestanding -O2 -Wall -Wextra
+
+  .PHONY: all clean myos.bin install-kernel create install-kernel install-grub_cfg
+  .SUFFIXES: .o .libk.o .c .S 
+
+  all: $(BINARIES)
+
+  libc.a: $(LIBC_OBJS)
+    $(AR) $(ARFLAGS) $@ $^
+
+  libk.a: $(LIBK_OBJS)
+    $(AR) $(ARFLAGS) $@ $^
+
+  .c.o:
+    $(CC) -MD -c $< -o $@ -std=gnu99 $(CFLAGS)
+
+  .S.o:
+    $(CC) -MD -c $< -o $@ $(CFLAGS)
+
+  .c.libk.o:
+    $(CC) -MD -c $< -o $@ -std=gnu99 $(CFLAGS)
+
+  .S.libk.o:
+    $(CC) -MD -c $< -o $@ $(CFLAGS)
+
+  clean:
+    rm -f $(BINARIES)
+    rm -rf $(ROOTDIR)
+    rm -f $(OBJS) *.o */*.o */*/*.o
+    rm -f $(OBJS:.o=.d) *.d */*.d */*/*.d
+
+  install: install-headers install-libs
+
+  install-libs: $(BINARIES)
+    mkdir -p $(LIBDIR)
+    cp $^ $(LIBDIR)
+
+  install-headers:
+    mkdir -p $(INCLUDEDIR)
+    cp -R include/. $(INCLUDEDIR)/.
+```
+
+라이브러리(libk)를 설치했으면, kernel의 링크 스크립트도 수정해야 한다.
+gcc 로 링크하는 과정에서 libk.a를 참조할 수 있도록 -lk 옵션을 붙여야 한다.
+
+```make
+  
+  ...
+
+  #LIBS= -nostdlib -lk -lgcc
+  LIBS= -lk 
+
+  LINKS=\
+  $(OBJS) \
+  $(LIBS) \
+
+  all: $(BIN)
+
+  $(BIN): $(OBJS) $(LSCRIPT)
+    $(CC) -T $(LSCRIPT) -o $@ $(CFLAGS) -nostdlib -lgcc $(LINKS)
+    grub-file --is-x86-multiboot $@
+
+  ...
+
+```
+
+# 후기
+
+컴파일, 링크, 라이브러리 생성 등 시스템 프로그래밍 수업때 배웠던 내용들을 다시 한번 짚어볼 수 있었다.
+헷갈리던 개념들을 정립하는 데 도움이 많이 되었다.
+os 개발의 방법론에 대하여 아주 조금 더 알게 된 것 같다.
