@@ -1,0 +1,20 @@
+{
+    "OSDEV COMMENT": {
+        "prefix": "OSDEVCOMMNET",
+        "body": [
+            "---",
+            "title: 'OS개발 - ${1:제목}'",
+            "description: '${2:부제}'",
+            "pubDate: '${CURRENT_MONTH_NAME_SHORT} ${CURRENT_DATE} ${CURRENT_YEAR}'",
+            "#updatedDate: ''",
+            "heroImage:",
+            "  src: '/blog-placeholder-4.jpg'",
+            "  alt: ''",
+            "tags: [\"Operating System\", \"OS\", \"osdev.org\", \"Tutorial\",]",
+            "series: \"OSDev 따라잡기\"",
+            "---",
+            "",
+        ],
+        "description": "OSDEV 스니펫"
+    }
+}
