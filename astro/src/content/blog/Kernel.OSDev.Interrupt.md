@@ -353,12 +353,60 @@ void irqHandler(uint8_t no, struct isr_regs *regs) {
 }
 ```
 
-# Programmable Interrupt Timer (PIT)
+# [Programmable Interrupt Timer (PIT)](https://wiki.osdev.org/Programmable_Interval_Timer)
+
+PIT 칩은 정해진 주기에 따라 펄스를 PIC에 발생시켜 IRQ를 일으킨다.
+이 PIT는 기본적으로 14.31818 MHz의 주파수로 동작한다.
+해당 주파수를 나눠서 더 느리게 펄스를 발생시켜 tick 발생 주기를 조절할 수 있다.
+이 PIT는 PIC의 IRQ0을 사용한다. PIT의 tick 발생 주기를 설정하고 IRQ0의 handler를 등록시키는 코드는 다음과 같다.
+
+```c
+#include "timer.h"
+#include <kernel/timer.h>
+
+#include "../interrupt/isr.h"
+#include "../io/io.h"
+
+#include <stdio.h>
+#include <string.h>
+
+uint32_t tick, nprint = 0;
+
+#define THRESHOLD 100
+
+static void timerCallback(struct isr_regs *regs) {
+  ++tick;
+  printf("ticked");
+}
+
+void initTimer(uint32_t freq) {
+  __asm__ volatile("cli");
+
+  installIrqHandler(IRQ0, timerCallback);
+
+  tick = 0;
+
+  uint32_t divisor = 119318 / freq;
+
+  outb(0x43, 0x36);
+  outb(0x40, (uint8_t)(divisor & 0xFF));
+  outb(0x40, (uint8_t)((divisor >> 8) & 0xFF));
+  __asm__ volatile("sti");
+}
+```
+
+다음과 같이 PIT의 IRQ handling이 잘 이루어지는 것을 확인할 수 있다.
+![image](/ticked.png)
 
 # 후기 
 
 ## 시행착오
 
+어셈블리어 작성이 익숙치 않아서 많은 실수를 했다.
+대부분의 디버깅은 어셈블리어 오류를 찾는데 할애하였다.
+크게 어려운 작업이 아닌데 불구하고 시간을 많이 잡아먹었다.
+
 ## 다음 작업
 
-Keyboard driver, paging, multitask
+앞으로 키보드 드라이버 구현을 할 예정이다.
+이후에는 페이징 및 멀티테스크 구현을 진행할 것이다.
