@@ -6,6 +6,6 @@ pubDate: 'Aug 11 2025'
 heroImage:
   src: '/blog-placeholder-4.jpg'
   alt: ''
-tags: ["Operating System", "OS", "osdev.org", "Tutorial",]
+tags: ["Operating System", "OS", "osdev.org", "Tutorial"]
 series: "OSDev 따라잡기"
 ---
