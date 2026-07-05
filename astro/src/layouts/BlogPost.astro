@@ -16,7 +16,6 @@ interface Props {
 const {post} = Astro.props
 
 const {
-	slug,
 	data: {
 		title,
 		description,
@@ -33,17 +32,26 @@ const {
 const { headings, remarkPluginFrontmatter } = post.render && await post.render();
 const { minutesRead } = remarkPluginFrontmatter;
 
-const socialImage = ogImage ?? `/og-image/${slug}.png`;
+const socialImage = ogImage ?? heroImage?.src ?? '/blog-placeholder-1.jpg';
 const dateTimeOptions: Intl.DateTimeFormatOptions = {
 	year: "numeric",
 	month: "long",
 	day: "numeric"
 };
 
-const articleDate = updatedDate?.toISOString() ?? pubDate.toISOString();
+const publishedTime = pubDate.toISOString();
+const modifiedTime = updatedDate?.toISOString();
 ---
 
-<Layout title={title} description={description} image={socialImage} articleDate={articleDate}>
+<Layout
+	title={title}
+	description={description}
+	image={socialImage}
+	type="article"
+	publishedTime={publishedTime}
+	modifiedTime={modifiedTime}
+	tags={tags}
+>
 	<article class="cody-bg prose dark:prose-invert prose-cody text-textColor max-w-4xl">
 		<header class="space-y-2">
 			{
@@ -91,7 +99,7 @@ const articleDate = updatedDate?.toISOString() ?? pubDate.toISOString();
 			<slot />
 		</main>
 		<BackToTopBtn/>
-		<script src="https://giscus.app/client.js"
+		<script is:inline src="https://giscus.app/client.js"
         data-repo="lshtar13/giscus"
         data-repo-id="R_kgDONcgyxg"
         data-category="General"

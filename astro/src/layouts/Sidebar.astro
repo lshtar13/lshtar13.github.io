@@ -8,21 +8,35 @@ interface Props {
 		title?: string;
 		description?: string;
 		image?: string;
-		articleDate?: string
+		type?: 'website' | 'article';
+		publishedTime?: string;
+		modifiedTime?: string;
+		tags?: string[];
 }
 
 const { 
 	title = siteConfig.title, 
 	description = siteConfig.description,
 	image,
-	articleDate
+	type = 'website',
+	publishedTime,
+	modifiedTime,
+	tags
 	} = Astro.props;
 
 ---
 <!doctype html>
-<html lang="en" class="dark">
+<html lang={siteConfig.lang} class="dark">
 	<head>
-		<BaseHead title={title} description={description} image={image} articleDate={articleDate}/>
+		<BaseHead
+			title={title}
+			description={description}
+			image={image}
+			type={type}
+			publishedTime={publishedTime}
+			modifiedTime={modifiedTime}
+			tags={tags}
+		/>
 	</head>
 	<body>
 		<Header/>
@@ -32,4 +46,4 @@ const {
 		</main>
 		<Footer/>
 	</body>
-</html
+</html>

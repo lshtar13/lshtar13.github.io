@@ -19,7 +19,7 @@ type SocialLink = {
 
 export const siteConfig: Config = {
   title: "Stunning Garbanzo",
-  description: "",
+  description: "백엔드, 운영체제, 알고리즘과 직접 만들며 배운 것들을 기록하는 개발 블로그입니다.",
   lang: "ko",
   profile: {
     author: "lshtar13",

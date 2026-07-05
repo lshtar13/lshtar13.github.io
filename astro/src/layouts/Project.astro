@@ -23,9 +23,9 @@ const {
 		github
 }} = project;
 const { headings } = project.render && await project.render();
-const articleDate = pubDate.toISOString();
+const publishedTime = pubDate.toISOString();
 ---
-<SidebarLayout title={title} description={description} articleDate={articleDate}>
+<SidebarLayout title={title} description={description} type="article" publishedTime={publishedTime} tags={stack}>
 	<section class="cody-bg space-y-2 sm:space-y-4">
 		<h2 class="title">{title}</h2>
 

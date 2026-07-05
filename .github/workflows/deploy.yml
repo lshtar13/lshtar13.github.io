@@ -25,7 +25,6 @@ jobs:
         with:
           path: ./astro
           node-version: 22.9.0
-          package-manager: pnpm@latest # The Node package manager that should be used to install dependencies and build your site. Automatically detected based on your lockfile. (optional)
 
   deploy:
     needs: build

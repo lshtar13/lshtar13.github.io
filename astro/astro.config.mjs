@@ -11,10 +11,19 @@ import tailwind from "@astrojs/tailwind";
 
 export const SiteURL = import.meta.env.PROD ? import.meta.env.VITE_PROD_URL : import.meta.env.VITE_DEV_URL;
 
+const shouldIncludeInSitemap = (page) => {
+  const { pathname } = new URL(page);
+  return !(
+    /^\/blog\/\d+\/$/.test(pathname) ||
+    /^\/tags\/.+/.test(pathname) ||
+    /^\/series\/.+/.test(pathname)
+  );
+};
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://lshtar13.github.io',
-  integrations: [mdx(), sitemap(), tailwind()],
+  integrations: [mdx(), sitemap({ filter: shouldIncludeInSitemap }), tailwind()],
   markdown: {
     remarkPlugins: [remarkReadingTime, remarkMath],
     rehypePlugins: [rehypeMathjax],
@@ -28,4 +37,3 @@ export default defineConfig({
     }
   },
 });
-
