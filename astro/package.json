@@ -28,5 +28,8 @@
     "@tailwindcss/typography": "^0.5.10",
     "vite": "^5.4.8"
   },
-  "packageManager": "pnpm@latest"
+  "packageManager": "pnpm@9.15.9",
+  "engines": {
+    "node": ">=18.17"
+  }
 }

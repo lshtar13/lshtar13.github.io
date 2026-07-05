@@ -18,6 +18,7 @@ astro/.env
 astro/.env.production
 
 # macOS-specific files
+/.DS_Store
 astro/.DS_Store
 
 # jetbrains setting folder

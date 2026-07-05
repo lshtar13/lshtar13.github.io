@@ -14,7 +14,7 @@ export const SiteURL = import.meta.env.PROD ? import.meta.env.VITE_PROD_URL : im
 // https://astro.build/config
 export default defineConfig({
   site: 'https://lshtar13.github.io',
-  integrations: [mdx(), sitemap(), tailwind(), sitemap()],
+  integrations: [mdx(), sitemap(), tailwind()],
   markdown: {
     remarkPlugins: [remarkReadingTime, remarkMath],
     rehypePlugins: [rehypeMathjax],
@@ -28,5 +28,4 @@ export default defineConfig({
     }
   },
 });
-
 

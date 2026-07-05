@@ -1,4 +1,29 @@
 <a name="readme-top"></a>
+
+## Local development
+
+This repository uses Node.js 20 and pnpm 9. From the repository root:
+
+```sh
+nvm install
+nvm use
+corepack enable
+cd astro
+pnpm install --frozen-lockfile
+pnpm dev
+```
+
+Open <http://localhost:4321>. Blog posts live in `astro/src/content/blog` and
+changes are reflected in the browser while the development server is running.
+
+To verify a production build locally:
+
+```sh
+cd astro
+pnpm build
+pnpm preview
+```
+
 <div align="center">
   
 [![Contributors][contributors-shield]][contributors-url]
