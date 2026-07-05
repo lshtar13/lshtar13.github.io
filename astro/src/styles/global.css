@@ -1,135 +1,168 @@
-@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding:wght@400;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @font-face {
-    font-family: 'SDSamliphopangche_Outline';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts-20-12@1.0/SDSamliphopangche_Outline.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
+  font-family: "Pretendard Variable";
+  src: url("/fonts/PretendardVariable.woff2") format("woff2-variations");
+  font-style: normal;
+  font-weight: 45 920;
+  font-display: swap;
 }
 
 @layer base {
   :root {
     color-scheme: light;
-    /* https://tailwindcss.com/docs/customizing-colors#using-css-variables */
-    --theme-bg: #efefef;
-    --theme-text: #222222;
-    --theme-accent: #dd7878;
-    --theme-accent-2: #bcc0cd;
-    --theme-surface: #e6e6e6;
-    --theme-quote: #dd7878;
-    --theme-highlight: #dd7878;
+    --theme-bg: #fafafa;
+    --theme-text: #171717;
+    --theme-muted: #737373;
+    --theme-accent: #0f766e;
+    --theme-accent-2: #a3a3a3;
+    --theme-surface: #fafafa;
+    --theme-code: #f3f4f4;
+    --theme-border: #e5e5e5;
+    --theme-quote: #a3a3a3;
+    --theme-highlight: #ccfbf1;
   }
 
   :root.dark {
     color-scheme: dark;
-    --theme-bg: #1d1d1d;
-    --theme-text: #ededed;
-    --theme-accent: #93e1d4;
-    --theme-accent-2: #545454;
-    --theme-surface: #2f2f2f;
-    --theme-quote: #93e1d4;
-    --theme-highlight: #93e1d4;
+    --theme-bg: #111111;
+    --theme-text: #e5e5e5;
+    --theme-muted: #a3a3a3;
+    --theme-accent: #5eead4;
+    --theme-accent-2: #737373;
+    --theme-surface: #111111;
+    --theme-code: #191919;
+    --theme-border: #2b2b2b;
+    --theme-quote: #737373;
+    --theme-highlight: #134e4a;
   }
-  
+
   html {
-    @apply scroll-smooth;
-  }
-  .nanum-gothic-coding-regular {
-    font-family: "Nanum Gothic Coding", monospace;
-    font-weight: 400;
-    font-style: normal;
-  }
-  .nanum-gothic-coding-bold {
-    font-family: "Nanum Gothic Coding", monospace;
-    font-weight: 700;
-    font-style: normal;
+    @apply scroll-smooth bg-bgColor;
   }
 
   html body {
-    @apply mx-auto flex min-h-screen max-w-6xl flex-col px-4 pt-4 md:pt-8 nanum-gothic-coding-regular font-mono text-sm font-normal antialiased bg-bgColor text-textColor;
-    font-family: "Nanum Gothic Coding", "Space Mono", font-mono, monospace;
+    @apply mx-auto flex min-h-screen max-w-[760px] flex-col bg-bgColor px-5 pt-6 font-normal text-textColor antialiased sm:px-6 sm:pt-9;
+    font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+      "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
+    font-size: 17px;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+    word-break: keep-all;
   }
 
-  /*
-  * CSS for markdown and MDX blog posts
-  */
+  a,
+  button,
+  summary {
+    @apply transition-colors duration-150;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--theme-accent);
+    outline-offset: 3px;
+  }
+
+  hr {
+    @apply my-8 border-solid;
+    border-color: var(--theme-border);
+  }
+
+  ::selection {
+    background: var(--theme-highlight);
+    color: var(--theme-text);
+  }
+
+  ::-moz-selection {
+    background: var(--theme-highlight);
+    color: var(--theme-text);
+  }
+
+  .prose.prose-cody {
+    color: var(--theme-text);
+    font-size: 17px;
+    line-height: 1.8;
+  }
+
+  .prose-cody :where(p, li) {
+    line-height: 1.8;
+  }
+
+  .prose-cody :where(h1, h2, h3, h4) {
+    color: var(--theme-text);
+    font-weight: 650;
+    letter-spacing: -0.025em;
+  }
 
   .prose-cody blockquote {
-    @apply text-quote border-l-0;
+    @apply border-l-2 pl-5 not-italic text-textColor;
+    border-color: var(--theme-quote);
   }
 
   .prose-cody a {
-    @apply no-underline;
+    @apply font-medium text-accent underline decoration-1 underline-offset-4;
   }
 
   .prose-cody strong {
     font-weight: 700;
   }
 
-  .prose-cody :where(code):not(:where([class~=not-prose],[class~=not-prose] *)) {
-    @apply bg-accent !text-surface px-1 py-0;
+  .prose-cody :where(code):not(:where(pre code, [class~="not-prose"], [class~="not-prose"] *)) {
+    background: var(--theme-code);
+    color: var(--theme-text) !important;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    font-size: 0.86em;
+    font-weight: 500;
+    padding: 0.1em 0.25em;
   }
 
-  .prose :where(code):not(:where([class~="not-prose"],[class~="not-prose"] *))::before{
+  .prose-cody pre,
+  .prose-cody pre code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  }
+
+  .prose-cody pre {
+    @apply border p-5;
+    border-color: var(--theme-border);
+    border-radius: 0;
+    background-color: var(--shiki-light-bg, var(--theme-code)) !important;
+    font-size: 14px;
+    line-height: 1.65;
+    tab-size: 2;
+  }
+
+  .prose-cody pre code {
+    background: transparent;
+    color: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    padding: 0;
+  }
+
+  .dark .prose-cody .astro-code {
+    background-color: var(--shiki-dark-bg, var(--theme-code)) !important;
+  }
+
+  .dark .prose-cody .astro-code span {
+    color: var(--shiki-dark) !important;
+    font-style: var(--shiki-dark-font-style) !important;
+    font-weight: var(--shiki-dark-font-weight) !important;
+    text-decoration: var(--shiki-dark-text-decoration) !important;
+  }
+
+  .prose :where(code):not(:where([class~="not-prose"], [class~="not-prose"] *))::before,
+  .prose :where(code):not(:where([class~="not-prose"], [class~="not-prose"] *))::after {
     content: none !important;
   }
 
-  .prose :where(code):not(:where([class~="not-prose"],[class~="not-prose"] *))::after{
-    content: none !important;
-  }
-
-  .prose-cody hr {
-    border-top-style: dashed;
-    border-top-width: 0.5px;
-    @apply border-accent my-4;
-  }
-  .prose-cody thead {
-    @apply border-b-0;
-  }
-
-  .prose-cody thead th {
-    @apply font-bold border-b border-dashed border-accent;
-  }
-
-  .prose-cody tbody tr {
-    @apply border-b-0;
-  }
-
-  .prose-cody tfoot {
-    @apply font-bold border-t border-dashed border-accent;
-  }
-
-  .prose-cody sup {
-    @apply ms-0.5;
-  }
-
-  .prose-cody sup > a {
-    @apply bg-none;
-  }
-
-  .prose-cody sup > a:hover {
-    @apply text-accent no-underline bg-none;
-  }
-
-  .prose-cody sup > a:before {
-    content: "[";
-    @apply text-accent;
-  }
-
-  .prose-cody sup > a:after {
-    content: "]";
-    @apply text-accent;
-  }
-
-  .prose-cody mark {
-    @apply bg-accent;
+  .prose-cody :where(th, td) {
+    border-color: var(--theme-border);
   }
 
   .prose-cody li::marker {
-    @apply text-accent;
+    color: var(--theme-muted);
   }
 
   .prose-cody table {
@@ -138,72 +171,42 @@
     white-space: nowrap;
   }
 
-  /*
-  * ===== END =====
-  */
-
   .tag {
-    @apply bg-accent px-1 py-0 text-bgColor font-semibold text-sm;
+    @apply text-sm text-[var(--theme-muted)];
   }
 
-  .tag:before {
-    content: "#";
-    @apply -mr-2;
+  .tag a {
+    @apply underline decoration-[var(--theme-border)] underline-offset-4 hover:text-accent hover:decoration-accent;
   }
 
   .cody-link {
-    @apply bg-[size:100%_6px] bg-bottom bg-repeat-x w-fit;
-    background-image: linear-gradient(
-      transparent,
-      transparent 5px,
-      var(--theme-text) 5px,
-      var(--theme-text)
-    );
-  }
-
-  .cody-link:hover {
-    background-image: linear-gradient(
-      transparent,
-      transparent 4px,
-      var(--theme-accent) 4px,
-      var(--theme-accent)
-    );
+    @apply underline decoration-[var(--theme-border)] underline-offset-4 hover:text-accent hover:decoration-accent;
   }
 
   .cody-bg {
-    @apply p-4 bg-surface;
+    @apply p-0;
   }
 
   .cody-copy-code {
-    @apply absolute top-2 right-2 bg-accent text-bgColor p-0.5 border border-accent hover:bg-bgColor hover:text-accent transition-all duration-200 text-sm;
-  }
-
-  .title:before {
-    content: "#";
-    @apply mr-2 text-accent-2;
+    @apply absolute right-2 top-2 border px-2 py-1 text-xs text-[var(--theme-muted)] opacity-80 hover:text-accent hover:opacity-100;
+    border-color: var(--theme-border);
+    border-radius: 0;
+    background: var(--theme-bg);
   }
 
   .title {
-    @apply text-lg font-bold mb-4;
+    @apply mb-6 text-2xl font-semibold tracking-tight;
   }
 
-  hr {
-    @apply border-accent border-dashed my-6;
-  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
 
-  ::selection {
-    @apply bg-highlight text-bgColor;
-  }
-
-  ::-moz-selection {
-    @apply bg-highlight text-bgColor;
-  }
-
-  .fade-in {
-    @apply transition-opacity duration-700 ease-in opacity-100 duration-700;
-  }
-  
-  .fade-out {
-    @apply transition-opacity duration-700 ease-in opacity-0 duration-700;
+    *,
+    *::before,
+    *::after {
+      transition-duration: 0.01ms !important;
+    }
   }
 }

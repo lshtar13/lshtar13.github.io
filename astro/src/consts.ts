@@ -12,7 +12,6 @@ type Config = {
 }
 
 type SocialLink = {
-  icon: string;
   friendlyName: string; // for accessibility
   link: string;
 }
@@ -22,58 +21,38 @@ export const siteConfig: Config = {
   description: "백엔드, 운영체제, 알고리즘과 직접 만들며 배운 것들을 기록하는 개발 블로그입니다.",
   lang: "ko",
   profile: {
-    author: "lshtar13",
-    description: "Junior Developer"
+    author: "Haesung Lee",
+    description: "Backend & Systems Engineer"
   }
 }
 
-/** 
-  These are you social media links. 
-  It uses https://github.com/natemoo-re/astro-icon#readme
-  You can find icons @ https://icones.js.org/
-*/
+/** Social links rendered as text in SocialMediaLinks. */
 export const socialLinks: Array<SocialLink> = [
   {
-    icon: "mdi:github",
-    friendlyName: "Github",
+    friendlyName: "GitHub",
     link: "https://github.com/lshtar13/",
   },
   {
-    icon: "mdi:email",
-    friendlyName: "email",
+    friendlyName: "LinkedIn",
+    link: "https://www.linkedin.com/in/leehaesung",
+  },
+  {
+    friendlyName: "Email",
     link: "mailto:edwin109802@gmail.com",
   },
   {
-    icon: "mdi:rss",
-    friendlyName: "rss",
+    friendlyName: "RSS",
     link: "/rss.xml"
   }
 ];
 
 export const NAV_LINKS: Array<{ title: string, path: string }> = [
   {
-    title: "Home",
-    path: "/",
+    title: "Writing",
+    path: "/blog",
   },
   {
     title: "About",
     path: "/about",
   },
-  { title: "Blog",
-    path: "/blog",
-  },
-  { title: "Tags",
-    path: "/tags",
-  },
-  { title: "Series",
-    path: "/series",
-  },
-  // {
-  //   title: "Projects",
-  //   path: '/projects'
-  // },
-  // {
-  //   title: "Archive",
-  //   path: '/archive'
-  // }
 ];

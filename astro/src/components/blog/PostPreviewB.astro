@@ -1,36 +1,22 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import type { HTMLTag, Polymorphic } from "astro/types";
-import FormattedDate from "@/components/FormattedDate";
-import { Icon } from "astro-icon";
+import FormattedDate from "../FormattedDate.astro";
 
-type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
+interface Props {
 	post: CollectionEntry<"blog">;
 	withDesc?: boolean;
-};
+}
 
 const { post, withDesc = false } = Astro.props;
 const postDate = post.data.updatedDate ?? post.data.pubDate;
-const pinned: boolean = !!post.data.order;
 ---
 
-<li>
-	<div class="flex flex-col gap-x-0 sm:flex-row sm:divide-x sm:divide-accent">
-		<FormattedDate date={postDate} class="min-w-[125px] text-gray-600 dark:text-gray-400"/>
-		<span class="sm:before:ml-4">
-			<a href={`/blog/${post.slug}/`} class="cody-link" data-astro-prefetch>
-				{post.data.title}
-			</a>
-			{ pinned &&
-				<Icon 
-					class="h-5 w-5 inline text-accent rotate-45 ml-1" 
-					name="mdi:pin" 
-					aria-hidden="true" 
-					focusable="false"
-				/>
-			}
-		</span>
+<li class="grid gap-1 sm:grid-cols-[7.5rem_1fr] sm:gap-4">
+	<FormattedDate date={postDate} class="font-mono text-xs tabular-nums text-[var(--theme-muted)]" />
+	<div>
+		<a class="font-medium text-textColor hover:text-accent" href={`/blog/${post.slug}/`} data-astro-prefetch>
+			{post.data.title}
+		</a>
+		{withDesc && <p class="mt-1 text-sm leading-6 text-[var(--theme-muted)]">{post.data.description}</p>}
 	</div>
-	{withDesc && ( <p class="italic">{post.data.description}</p> )}
 </li>
-

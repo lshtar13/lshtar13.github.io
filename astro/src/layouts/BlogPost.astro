@@ -1,46 +1,29 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import Layout from '../layouts/Sidebar.astro';
-import FormattedDate from '../components/FormattedDate.astro';
-import SocialMediaLinks from '@/components/SocialMediaLinks';
-import TOC from '@/components/TableOfContents';
-import BackToTopBtn from '@/components/BackToTopBtn';
-import CopyBtn from '@/components/CopyBtn';
-import { Icon } from 'astro-icon';
-import { siteConfig } from '../consts';
+import type { CollectionEntry } from "astro:content";
+import Layout from "./Sidebar.astro";
+import FormattedDate from "../components/FormattedDate.astro";
+import TableOfContents from "../components/TableOfContents.astro";
+import CopyBtn from "../components/CopyBtn.astro";
 
 interface Props {
 	post: CollectionEntry<"blog">;
 }
 
-const {post} = Astro.props
-
+const { post } = Astro.props;
 const {
-	data: {
-		title,
-		description,
-		pubDate,
-		updatedDate,
-		heroImage,
-		ogImage,
-		tags,
-		series,
-		draft
-	}
+	data: { title, description, pubDate, updatedDate, heroImage, ogImage, tags, series, draft },
 } = post;
 
 const { headings, remarkPluginFrontmatter } = post.render && await post.render();
 const { minutesRead } = remarkPluginFrontmatter;
-
-const socialImage = ogImage ?? heroImage?.src ?? '/blog-placeholder-1.jpg';
-const dateTimeOptions: Intl.DateTimeFormatOptions = {
-	year: "numeric",
-	month: "long",
-	day: "numeric"
-};
-
+const socialImage = ogImage ?? heroImage?.src ?? "/blog-placeholder-1.jpg";
 const publishedTime = pubDate.toISOString();
 const modifiedTime = updatedDate?.toISOString();
+const dateTimeOptions: Intl.DateTimeFormatOptions = {
+	year: "numeric",
+	month: "short",
+	day: "numeric",
+};
 ---
 
 <Layout
@@ -52,90 +35,68 @@ const modifiedTime = updatedDate?.toISOString();
 	modifiedTime={modifiedTime}
 	tags={tags}
 >
-	<article class="cody-bg prose dark:prose-invert prose-cody text-textColor max-w-4xl">
-		<header class="space-y-2">
-			{
-				heroImage &&
-				<div class="aspect-h-9 aspect-w-16 mb-6 w-full flex justify-center">
-						<img src={heroImage.src} alt={heroImage.alt} class="m-0"/>
-				</div>
-			}
+	<article class="prose prose-cody max-w-none dark:prose-invert">
+		<header class="not-prose mb-12">
 			{series && (
-				<div class="md:sr-only not-sr-only">
-					<span>Part of series:</span>
-						<a class="cody-link" href={`/series/${series}`}>{series}</a>
-				</div>
+				<p class="mb-4 text-sm text-[var(--theme-muted)]">
+					<a class="hover:text-accent" href={`/series/${series}`}>{series}</a>
+				</p>
 			)}
-			<div class="flex gap-2 items-center">
-				<h1 class="text-3xl my-0">{title}</h1>
-				{ draft && (<span class="px-1 py-0 bg-red-200 text-red-600 text-sm font-semibold">draft</span>)}
+
+			<div class="flex items-start gap-3">
+				<h1 class="text-3xl font-semibold leading-tight tracking-tight text-textColor sm:text-4xl">{title}</h1>
+				{draft && <span class="mt-2 text-xs text-[var(--theme-muted)]">Draft</span>}
 			</div>
-			<span class="font-semibold text-textColor flex gap-2 items-center">
-				<FormattedDate date={pubDate} dateTimeOptions={dateTimeOptions}/>
-				<span>
-					/ {minutesRead}
-				</span>
-				{
-					updatedDate && (
-						<div class="italic px-2 bg-accent-2 w-fit text-sm font-normal">
-							Last updated: <FormattedDate date={updatedDate} dateTimeOptions={dateTimeOptions} />
-						</div>
-					)
-				}
-			</span>
-			{tags && (
-				<ul class="not-prose flex gap-2 flex-wrap">
-					<Icon class="w-5 h-5" name="carbon:tag-group" aria-hidden="true" focusable="false"/>
-					{tags.map((tag: string) => (
-						<li class="tag">
-							<a href={`/tags/${tag}`}>{tag}</a>
-						</li>
+
+			<div class="mt-4 flex flex-wrap items-center gap-x-2 text-sm text-[var(--theme-muted)]">
+				<FormattedDate date={pubDate} dateTimeOptions={dateTimeOptions} />
+				<span aria-hidden="true">·</span>
+				<span>{minutesRead}</span>
+				{updatedDate && (
+					<>
+						<span aria-hidden="true">·</span>
+						<span>수정 <FormattedDate date={updatedDate} dateTimeOptions={dateTimeOptions} /></span>
+					</>
+				)}
+			</div>
+
+			{tags && tags.length > 0 && (
+				<ul class="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-sm text-[var(--theme-muted)]" aria-label="태그">
+					{tags.map((tag) => (
+						<li><a class="hover:text-accent" href={`/tags/${tag}`}>{tag}</a></li>
 					))}
 				</ul>
 			)}
-		</header>
-		<hr class="my-4"/>
-		<main class="prose-sm prose-headings:font-semibold prose-headings:ml-4 prose-headings:before:absolute prose-headings:before:-ms-4 prose-headings:before:text-accent prose-headings:before:content-['#'] prose-th:before:content-none prose-a:text-accent">
-			<slot />
-		</main>
-		<BackToTopBtn/>
-		<script is:inline src="https://giscus.app/client.js"
-        data-repo="lshtar13/giscus"
-        data-repo-id="R_kgDONcgyxg"
-        data-category="General"
-        data-category-id="DIC_kwDONcgyxs4ClJ87"
-        data-mapping="pathname"
-        data-strict="0"
-        data-reactions-enabled="1"
-        data-emit-metadata="0"
-        data-input-position="bottom"
-        data-theme="preferred_color_scheme"
-        data-lang="ko"
-        crossorigin="anonymous"
-        async>
-		</script>
-	</article>
-	<aside slot="sidebar" class="hidden sm:block">
-		<div class="flex flex-col space-y-2">
-			<h2 class="font-semibold text-lg text-textColor">{siteConfig.profile.author}</h2>
-			{siteConfig.profile.description && (<p>{siteConfig.profile.description}</p>)}
-			<SocialMediaLinks/>
-			<span class="!my-4 text-accent" aria-hidden>---</span>
-			<p>
-				{description}
-			</p>
-			{series && (
-				<div class="pt-2 hidden md:block">
-					<span>Part of series: </span>
-					<br>
-					<ul>
-							<li><a class="cody-link" href={`/series/${series}`}>{series}</a></li>
-					</ul>
-				</div>
+
+			{heroImage && (
+				<img src={heroImage.src} alt={heroImage.alt ?? ""} class="mt-8 w-full" />
 			)}
+		</header>
+
+		{headings.length >= 3 && <TableOfContents headings={headings} />}
+
+		<div class="article-body">
+			<slot />
 		</div>
-		{!!headings.length && <TOC headings={headings} />}
-	</aside>
+
+		<div class="not-prose mt-20 border-t border-[var(--theme-border)] pt-10">
+			<script is:inline src="https://giscus.app/client.js"
+				data-repo="lshtar13/giscus"
+				data-repo-id="R_kgDONcgyxg"
+				data-category="General"
+				data-category-id="DIC_kwDONcgyxs4ClJ87"
+				data-mapping="pathname"
+				data-strict="0"
+				data-reactions-enabled="1"
+				data-emit-metadata="0"
+				data-input-position="bottom"
+				data-theme="preferred_color_scheme"
+				data-lang="ko"
+				crossorigin="anonymous"
+				async>
+			</script>
+		</div>
+	</article>
 </Layout>
 
-<CopyBtn/>
+<CopyBtn />

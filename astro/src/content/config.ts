@@ -38,6 +38,8 @@ const blog = defineCollection({
 		draft: z.boolean().optional().default(false),
 		// for pinning posts
 		order: z.number().min(1).max(5).optional(),
+		// for curating posts on the home page
+		featured: z.number().min(1).max(10).optional(),
 		// hide a post from pagination
 		hide: z.boolean().optional().default(false)
 	}),

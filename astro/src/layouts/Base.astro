@@ -21,10 +21,8 @@ const { title = "", description = siteConfig.description, image } = Astro.props;
 	</head>
 	<body>
 		<Header/>
-		<main>
-			<section class="cody-bg">
-				<slot/>
-			</section>
+		<main class="w-full">
+			<slot/>
 		</main>
 		<Footer/>
 	</body>

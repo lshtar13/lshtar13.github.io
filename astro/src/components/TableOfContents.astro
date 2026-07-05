@@ -1,77 +1,38 @@
 ---
 import type { MarkdownHeading } from "astro";
-import TableOfContentsHeading from '@/components/TableOfContentsHeading';
-const { headings } = Astro.props;
-const toc = buildToc(headings);
+import TableOfContentsHeading from "./TableOfContentsHeading.astro";
 
-// https://github.com/chrismwilliams/astro-theme-cactus/blob/a85e0e559d3f92b32e73990486c0574b2b733227/src/utils/generateToc.ts
 export interface TocItem extends MarkdownHeading {
-	subheadings: Array<TocItem>;
+	subheadings: TocItem[];
 }
 
-function diveChildren(item: TocItem, depth: number): Array<TocItem> {
-	if (depth === 1 || !item.subheadings.length) {
-		return item.subheadings;
-	} else {
-		// e.g., 2
-		return diveChildren(item.subheadings[item.subheadings.length - 1] as TocItem, depth - 1);
+const { headings } = Astro.props as { headings: ReadonlyArray<MarkdownHeading> };
+
+function buildToc(items: ReadonlyArray<MarkdownHeading>): TocItem[] {
+	const toc: TocItem[] = [];
+	const stack: TocItem[] = [];
+
+	for (const item of items) {
+		const heading: TocItem = { ...item, subheadings: [] };
+		while (stack.length && stack[stack.length - 1].depth >= heading.depth) stack.pop();
+		if (stack.length) stack[stack.length - 1].subheadings.push(heading);
+		else toc.push(heading);
+		stack.push(heading);
 	}
-}
 
-function buildToc(headings: ReadonlyArray<MarkdownHeading>) {
-	// this ignores/filters out h1 element(s)
-	const bodyHeadings = headings.filter(({ depth }) => depth > 1);
-	const toc: Array<TocItem> = [];
-
-	bodyHeadings.forEach((h) => {
-	const heading: TocItem = { ...h, subheadings: [] };
-
-		// add h2 elements into the top level
-		if (heading.depth === 2) {
-			toc.push(heading);
-		} else {
-			const lastItemInToc = toc[toc.length - 1]!;
-			if (heading.depth < lastItemInToc.depth) {
-				throw new Error(`Orphan heading found: ${heading.text}.`);
-			}
-
-			// higher depth
-			// push into children, or children's children
-			const gap = heading.depth - lastItemInToc.depth;
-			const target = diveChildren(lastItemInToc, gap);
-			target.push(heading);
-		}
-	});
 	return toc;
 }
 
+const toc = buildToc(headings);
 ---
 
-<nav class="sticky top-20 order-2 hidden basis-64 lg:block">
-	<hr/>
-	<h2 class="font-bold text-lg">Table of Contents</h2>
-	<ul class="-me-32" id="toc">
-		{toc.map((heading) => <TableOfContentsHeading heading={heading} />)}
-	</ul>
-</nav>
-
-
-<script>
-	const toc = document.getElementById("toc");
-	if(toc) {
-		toc?.addEventListener('click', (e) => {
-			const prevHeading = window.location.hash.slice(1);
-			const prevLink = document.getElementById(`toc-${prevHeading}`);
-
-			// remove active class from prev heading
-			if(prevLink instanceof HTMLElement) {
-				prevLink?.classList.remove('active-toc');
-			}
-
-			// add active class to current heading
-			if (e.target instanceof HTMLElement) {
-				e.target.classList.add('active-toc');
-			}
-		});
-	}
-</script>
+<details class="not-prose my-8 border-y border-[var(--theme-border)] py-4">
+	<summary class="cursor-pointer select-none text-sm font-medium text-[var(--theme-muted)] hover:text-accent">
+		목차 <span class="ml-1 font-normal">({headings.length})</span>
+	</summary>
+	<nav class="mt-4" aria-label="글 목차">
+		<ul class="space-y-2 text-sm leading-6 text-[var(--theme-muted)]">
+			{toc.map((heading) => <TableOfContentsHeading heading={heading} />)}
+		</ul>
+	</nav>
+</details>

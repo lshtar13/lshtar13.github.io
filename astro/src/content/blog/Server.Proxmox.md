@@ -8,6 +8,7 @@ heroImage:
 tags: ["Home Server", "Proxmox", "Nginx", "Code-server", "LG gram"]
 updatedDate: 'Nov 09 2024'
 series: "Home Server - DEFCON"
+featured: 3
 hide: false
 ---
 

@@ -1,102 +1,104 @@
 ---
 import Layout from "../layouts/Base.astro";
+import SocialMediaLinks from "../components/SocialMediaLinks.astro";
+
+const experiences = [
+	{
+		period: "2026.03 - 현재",
+		role: "학부연구생",
+		place: "성균관대학교 지능형임베디드시스템연구실",
+		description: "CXL 기반 계층형 메모리와 SSD 펌웨어 인터페이스를 연구하고 있습니다.",
+	},
+	{
+		period: "2025.10 - 2026.02",
+		role: "Software Engineer Intern",
+		place: "신한투자증권 디지털자산부",
+		description: "디지털 자산 거래 플랫폼을 마이크로서비스로 분리하고, Go 텔레메트리 서버와 K3s 기반 인프라를 개발했습니다.",
+	},
+	{
+		period: "2023.08 - 2024.02",
+		role: "학부연구생",
+		place: "성균관대학교 지능형임베디드시스템연구실",
+		description: "ext4 fast-commit을 분석하고 I/O 패턴에 따라 동작하는 선택적 저널링 기법을 구현했습니다.",
+	},
+];
+
+const projects = [
+	{
+		name: "Codedang",
+		href: "https://github.com/skkuding/codedang",
+		period: "2022.08 - 현재",
+		description: "성균관대학교 온라인 저지 플랫폼의 NestJS 백엔드와 Go 채점 서버를 개발하고 운영합니다.",
+	},
+	{
+		name: "Fin2Vec",
+		href: "https://github.com/HOYNET/Fin2Vec",
+		period: "2023.09 - 2024.01",
+		description: "금융 시계열을 임베딩하고 종목 간 연관도를 분석하는 Transformer 기반 모델을 만들었습니다.",
+	},
+];
 ---
 
 <Layout
-	title="About Me"
-	description="Lorem ipsum dolor sit amet"
-	image="/blog-placeholder-about.jpg"
+	title="About"
+	description="백엔드와 시스템 소프트웨어를 공부하고 만드는 이해성의 소개입니다."
 >
-	<h1 class="title">About</h1>
-	<p>
-		Hi, I'm Lee Haesung. I'm undergraduate student and aspiring developer.
-	</p>
-	Currently, interested in web development, and linux kernel.
+	<div class="space-y-20">
+		<header class="max-w-2xl">
+			<h1 class="mb-6 text-3xl font-semibold tracking-tight sm:text-4xl">이해성 <span class="font-normal text-[var(--theme-muted)]">Haesung Lee</span></h1>
+			<p class="text-lg font-medium leading-relaxed">
+				원리에 대한 이해가 가장 유용한 디버깅이라고 생각하는 개발자입니다.
+			</p>
+			<p class="mt-5 text-[var(--theme-muted)]">
+				성균관대학교 소프트웨어학과에서 공부하며 백엔드 엔지니어링과 시스템 소프트웨어를 만들고 있습니다.
+				서비스의 표면보다 그 아래에서 데이터가 흐르고 시스템이 동작하는 방식을 파고드는 일을 좋아합니다.
+			</p>
+			<div class="mt-6"><SocialMediaLinks /></div>
+		</header>
 
-	<h2 class="title mt-4">History:</h2>
-	<ul class="list-inside list-disc">
-		<li>Sungkyunkwan Univ.</li>
-		<ul class="list-inside list-none ml-6 text-sm">
-			<li>
-				- B.S. in Computer Science and Engineering (February 2022 –
-				Present)
-			</li>
-			<li>
-				- Undergraduate Researcher in <a
-					href="http://nyx.skku.ac.kr/"
-					target="_blank"
-					class="text-blue-500 hover:text-blue-700 underline"
-					>iESLAB</a
-				> (Supervised by Prof. Shin, August 2023 - February 2024)
-			</li>
-		</ul>
-		<li>
-			<a
-				href="https://skkuding.dev/about/"
-				target="_blank"
-				class="text-blue-500 hover:text-blue-700 underline">SKKUDING</a
-			>
-		</li>
+		<section aria-labelledby="current-focus">
+			<h2 id="current-focus" class="mb-5 text-lg font-semibold">지금 하는 일</h2>
+			<p class="text-[var(--theme-muted)]">
+				<span class="text-textColor">Research</span> CXL · SSD · Linux<br />
+				<span class="text-textColor">Backend</span> Go · TypeScript · gRPC<br />
+				<span class="text-textColor">Infrastructure</span> Kubernetes · AWS · GitOps
+			</p>
+		</section>
 
-		<ul class="list-inside list-none ml-6 text-sm">
-			<li>- Backend Developer (August 2022 – February 2024)</li>
-		</ul>
-		<li>Republic of Korea Army</li>
-		<ul class="list-inside list-none ml-6 text-sm">
-			<li>- M/W Operator (April 2024 – Present)</li>
-		</ul>
-	</ul>
+		<section aria-labelledby="experience">
+			<h2 id="experience" class="mb-5 text-lg font-semibold">경험</h2>
+			<ol class="divide-y divide-[var(--theme-border)]">
+				{experiences.map(({ period, role, place, description }) => (
+					<li class="grid gap-2 py-6 first:pt-0 sm:grid-cols-[9rem_1fr] sm:gap-6">
+						<p class="font-mono text-sm text-[var(--theme-muted)]">{period}</p>
+						<div>
+							<h3 class="font-semibold">{role} · {place}</h3>
+							<p class="mt-2 text-[var(--theme-muted)]">{description}</p>
+						</div>
+					</li>
+				))}
+			</ol>
+		</section>
 
-	<h3 class="title mt-4">Projects:</h3>
-	<ul class="list-inside list-disc">
-		<li>
-			<a
-				href="https://github.com/skkuding/codedang"
-				target="_blank"
-				class="text-blue-500 hover:text-blue-700 underline">Codedang</a
-			> (January 2023 - February 2024)
-		</li>
-		<ul class="list-inside list-none ml-6 text-sm">
-			<li>- Participated as backend developer</li>
-		</ul>
-		<li>
-			Industry-Academia Collaboration Project (March 2023 - December 2023)
-		</li>
-		<ul class="list-inside list-none ml-6 text-sm">
-			<li>
-				- AI model optimization with <a
-					href="https://soynet.io/about/"
-					target="_blank"
-					class="text-blue-500 hover:text-blue-700 underline"
-					>Soynet</a
-				>
-			</li>
-		</ul>
-		<li>
-			<a
-				href="https://github.com/HOYNET/Fin2Vec"
-				target="_blank"
-				class="text-blue-500 hover:text-blue-700 underline">Hoynet</a
-			> (August 2023 - January 2024)
-		</li>
-		<ul class="list-inside list-none ml-6 text-sm">
-			<li>- Participated as M/L developer</li>
-		</ul>
-	</ul>
+		<section aria-labelledby="projects">
+			<h2 id="projects" class="mb-5 text-lg font-semibold">프로젝트</h2>
+			<ul class="divide-y divide-[var(--theme-border)]">
+				{projects.map(({ name, href, period, description }) => (
+					<li class="py-6 first:pt-0">
+						<div class="flex flex-wrap items-baseline justify-between gap-2">
+							<a class="font-semibold hover:text-accent" href={href} target="_blank" rel="noopener noreferrer">{name} ↗</a>
+							<span class="font-mono text-xs text-[var(--theme-muted)]">{period}</span>
+						</div>
+						<p class="mt-2 text-sm leading-6 text-[var(--theme-muted)]">{description}</p>
+					</li>
+				))}
+			</ul>
+		</section>
 
-	<h4 class="title mt-4">Info:</h4>
-	<li>
-		<a
-			href="https://github.com/lshtar13/"
-			target="_blank"
-			class="text-blue-500 hover:text-blue-700 underline">github</a
-		>
-	</li>
-	<li>
-		<a
-			href="mailto:edwin109802@gmail.com"
-			target="_blank"
-			class="text-blue-500 hover:text-blue-700 underline">mail</a
-		>
-	</li>
+		<section aria-labelledby="education">
+			<h2 id="education" class="mb-5 text-lg font-semibold">학력</h2>
+			<p class="font-semibold">성균관대학교 소프트웨어학과</p>
+			<p class="text-[var(--theme-muted)]">2022 - 현재 · GPA 4.15/4.5 (전공 4.34/4.5)</p>
+		</section>
+	</div>
 </Layout>

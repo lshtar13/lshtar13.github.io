@@ -4,6 +4,7 @@ description: 'KT 디지털인재장학생 사회공헌 프로젝트에서 실제
 pubDate: 'Jul 05 2026'
 tags: ['DRT', 'AI Call Center', 'Asterisk', 'SIP', 'Backend']
 series: 'KT 디지털인재장학생 26학년도 사회공헌 프로젝트 X 한국교통안전공단'
+featured: 1
 ---
 
 # 배경
@@ -311,4 +312,3 @@ Asterisk가 클라이언트의 사설 IP로 RTP를 보내고 있었기 때문이
 
 이 과정에서 OCI Security List, VM iptables, PJSIP NAT 설정이 각각 어디에서 문제를 만드는지 확인할 수 있었다.
 AI 콜센터 백엔드로 가기 전, 일단 전화부터 제대로 받아보는 과정은 [다음 글](/blog/serverasterisk/)에 정리하였다.
-

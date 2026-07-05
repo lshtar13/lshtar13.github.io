@@ -1,89 +1,48 @@
 ---
 import BaseLayout from "../layouts/Base.astro";
-import PostPreview from "@/components/blog/PostPreviewB";
-import SocialMediaLinks from "@/components/SocialMediaLinks";
-import {
-	getAllPosts,
-	sortMDByDate,
-	sortMDByPinned,
-} from "@/utils";
+import PostPreview from "../components/blog/PostPreviewB.astro";
+import SocialMediaLinks from "../components/SocialMediaLinks.astro";
+import { getAllPosts, sortMDByDate } from "../utils";
 
-const MAX_POSTS = 10;
-const allPosts = await getAllPosts(true);
-const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS);
-const allPostsByPinned = sortMDByPinned(allPostsByDate);
-
-const tech: Array<{ title: string; desc: string; href: string }> = [
-	{
-		title: "Astro",
-		desc: "Build fast websites, faster.",
-		href: "https://astro.build",
-	},
-	{
-		title: "Astro Assets",
-		desc: "Built-in optimized asset support.",
-		href: "https://docs.astro.build/en/guides/assets/",
-	},
-	{
-		title: "Tailwind CSS",
-		desc: "Rapidly build modern websites without ever leaving your HTML.",
-		href: "https://tailwindcss.com",
-	},
-	{
-		title: "Markdown",
-		desc: "Simple and easy-to-use markup language.",
-		href: "https://www.markdownguide.org/",
-	},
-	{
-		title: "MDX",
-		desc: "Markdown for the component era.",
-		href: "https://mdxjs.com/",
-	},
-	{
-		title: "Astro Icon",
-		desc: "An easy to use Icon component for Astro.",
-		href: "https://github.com/natemoo-re/astro-icon#readme",
-	},
-];
+const allPosts = (await getAllPosts(true)).filter(({ data }) => !data.draft);
+const featuredPosts = allPosts
+	.filter(({ data }) => data.featured)
+	.sort((a, b) => (a.data.featured ?? 100) - (b.data.featured ?? 100));
+const featuredSlugs = new Set(featuredPosts.map(({ slug }) => slug));
+const recentPosts = sortMDByDate(allPosts.filter(({ slug }) => !featuredSlugs.has(slug))).slice(0, 10);
 ---
 
 <BaseLayout title="Home">
-	<section>
-		<h1 class="title">Stunning Garbanzo</h1>
-		<p class="mb-4 sm:mb-8">
-			기록하는 곳.
+	<section class="mb-20 max-w-2xl">
+		<h1 class="text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
+			동작 원리를 파고들며 만든 것들을 기록합니다.
+		</h1>
+		<p class="mt-6 text-[var(--theme-muted)]">
+			백엔드, Linux와 스토리지, 분산 시스템을 공부하고 만듭니다.
+			문제가 생긴 지점과 해결하기까지의 판단을 가능한 한 구체적으로 남깁니다.
 		</p>
-		<div>
-			<span>You can find me on: </span>
-			<SocialMediaLinks />
+		<div class="mt-6"><SocialMediaLinks /></div>
+	</section>
+
+	<section class="mb-20" aria-labelledby="featured-writing">
+		<h2 id="featured-writing" class="mb-7 text-lg font-semibold">대표 글</h2>
+		<ol class="space-y-8">
+			{featuredPosts.map((post) => (
+				<li>
+					<a class="font-medium text-textColor hover:text-accent" href={`/blog/${post.slug}/`}>{post.data.title}</a>
+					<p class="mt-1 text-sm leading-6 text-[var(--theme-muted)]">{post.data.description}</p>
+				</li>
+			))}
+		</ol>
+	</section>
+
+	<section aria-labelledby="recent-writing">
+		<div class="mb-7 flex items-baseline justify-between gap-4">
+			<h2 id="recent-writing" class="text-lg font-semibold">최근 글</h2>
+			<a class="text-sm text-[var(--theme-muted)] hover:text-accent" href="/blog">전체 글 →</a>
 		</div>
-	</section>
-
-	<section class="mt-8 sm:mt-16">
-		<h2 class="title">Posts</h2>
-		<ul class="space-y-4 sm:space-y-2">
-			{allPostsByPinned.map((p) => <PostPreview post={p} />)}
-		</ul>
-	</section>
-
-	<section class="mt-16">
-		<h2 class="title">Technologies</h2>
-		<ul class="space-y-4 sm:space-y-2">
-			{
-				tech.map(({ href, title, desc }) => (
-					<li>
-						<a
-							href={href}
-							target="_blank"
-							rel="noopener noreferrer"
-							class="cody-link inline-block"
-						>
-							{title}
-						</a>
-						:<p class="inline-block sm:mt-2">{desc}</p>
-					</li>
-				))
-			}
+		<ul class="space-y-5">
+			{recentPosts.map((post) => <PostPreview post={post} />)}
 		</ul>
 	</section>
 </BaseLayout>

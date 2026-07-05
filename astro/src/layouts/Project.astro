@@ -1,9 +1,5 @@
 ---
-import { siteConfig } from '../consts';
 import SidebarLayout from './Sidebar.astro';
-import SocialMediaLinks from '@/components/SocialMediaLinks';
-import TOC from '@/components/TableOfContents';
-import { Icon } from "astro-icon";
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
@@ -22,12 +18,11 @@ const {
 		website,
 		github
 }} = project;
-const { headings } = project.render && await project.render();
 const publishedTime = pubDate.toISOString();
 ---
 <SidebarLayout title={title} description={description} type="article" publishedTime={publishedTime} tags={stack}>
-	<section class="cody-bg space-y-2 sm:space-y-4">
-		<h2 class="title">{title}</h2>
+	<article class="space-y-8">
+		<h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h1>
 
 		{
 			heroImage && 
@@ -36,7 +31,7 @@ const publishedTime = pubDate.toISOString();
 			</div>
 		}
 
-		<ul class="space-y-2">
+		<ul class="space-y-3 text-sm">
 			{ platform && 
 				<li class="project-frontmatter-item">
 					<small>PLATFORM</small>
@@ -46,16 +41,9 @@ const publishedTime = pubDate.toISOString();
 			{ stack && 
 				<li class="project-frontmatter-item">
 					<small>STACK</small>
-					<ul class="inline-flex gap-2 sm:gap-4">
+					<ul class="inline-flex flex-wrap gap-x-3">
 						{stack.map((s: string) => ( 
-							<li>
-								<Icon 
-									class="h-6 w-6 text-textColor" 
-									name={`vscode-icons:file-type-${s.toLowerCase()}`} 
-									focusable="false"
-								title={s}
-								/>
-							</li>
+							<li class="tag">{s}</li>
 						))}
 					</ul>
 				</li> 
@@ -76,28 +64,15 @@ const publishedTime = pubDate.toISOString();
 
 		<hr/>
 
-		<div class="prose dark:prose-invert prose-sm prose-headings:font-semibold prose-headings:ml-4 prose-headings:before:absolute prose-headings:before:-ms-4 prose-headings:before:text-accent prose-headings:before:content-['#'] prose-th:before:content-none">
+		<div class="prose prose-cody max-w-none dark:prose-invert">
 			<slot />
 		</div>
-
-	</section>
-	<aside slot="sidebar">
-		<div class="flex flex-col space-y-2">
-			<h2 class="font-semibold text-lg text-textColor">{siteConfig.profile.author}</h2>
-			{siteConfig.profile.description && (<p>{siteConfig.profile.description}</p>)}
-			<SocialMediaLinks/>
-			<span class="!my-4 text-accent" aria-hidden>---</span>
-			<p>
-				{description}
-			</p>
-		</div>
-		{!!headings.length && <TOC headings={headings} />}
-	</aside>	
+	</article>
 </SidebarLayout>
 
 <style>
 	small {
-		@apply text-bgColor px-1 bg-accent mr-2 font-semibold min-w-[95px];
+		@apply mr-2 min-w-[95px] font-medium text-[var(--theme-muted)];
 	}
 
 	.project-frontmatter-item {
